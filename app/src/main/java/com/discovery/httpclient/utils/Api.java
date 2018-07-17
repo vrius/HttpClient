@@ -5,5 +5,5 @@ package com.discovery.httpclient.utils;
  */
 
 public class Api {
-    public static final String baseUrl = "https://www.apiopen.top/novelSearchApi";
+    public static final String baseUrl = "http://192.168.1.147:8080/carapp/carappdown/down";
 }

@@ -1,5 +1,6 @@
 package com.discovery.httpclient;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,19 +21,23 @@ import java.util.logging.Level;
 public class MainActivity extends AppCompatActivity implements Observer{
 
     private static final String TAG = "RWJ MainActivity";
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TLog.d(TAG,"发送请求");
-                CommonRequest request = new CommonRequest(Api.baseUrl);
-                Map<String, String> map = request.getMap();
-                map.put("name","盗墓笔记");
-                HttpManager.getInstance().send(MainActivity.this,request,new Bean(),MainActivity.this);
+                CommonRequest request = new CommonRequest(Api.baseUrl, CommonRequest.HttpTypeEnum.POST);
+                Map<String, Object> map = request.getMap();
+                map.put("a","盗墓笔记");
+                map.put("b","12.01");
+                map.put("c","true");
+                HttpManager.getInstance().send(mContext,request,new Bean(),MainActivity.this);
                 //httpTasks.add(new t)
             }
         });

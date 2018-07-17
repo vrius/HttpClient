@@ -20,7 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class HttpManager extends BaseManager implements IManager{
+public class HttpManager extends BaseManager implements IManager {
     public static final String TAG = "RWJ HttpManager";
     private static boolean isCompress = false;
     private static HttpManager mManager = new HttpManager();
@@ -68,8 +68,9 @@ public class HttpManager extends BaseManager implements IManager{
 
 
     @Override
-    public void send(Context context, CommonRequest request, BaseResponse response, Observer observer) {
-        mHttpTasks.add(new HttpTask(context,request,response,observer).execute());
+    public void send(Context context, CommonRequest request, BaseResponse response, Observer
+            observer) {
+        mHttpTasks.add(new HttpTask(context, request, response, observer).execute());
     }
 
     /*
@@ -78,11 +79,13 @@ public class HttpManager extends BaseManager implements IManager{
     protected class HttpTask extends BaseTask {
         protected boolean isCanceled = false; // 是否为取消
 
-        public HttpTask(Context context, CommonRequest request, BaseResponse response, Observer observer) {
+        public HttpTask(Context context, CommonRequest request, BaseResponse response, Observer
+                observer) {
             super(context, request, response, observer);
         }
 
-        public HttpTask(Context context, int tipId, CommonRequest request, BaseResponse response, Observer observer) {
+        public HttpTask(Context context, int tipId, CommonRequest request, BaseResponse response,
+                        Observer observer) {
             super(context, tipId, request, response, observer);
         }
 
@@ -126,17 +129,17 @@ public class HttpManager extends BaseManager implements IManager{
             try {
                 CommonRequest.HttpTypeEnum type = mRequest.getHttpType();
                 Request request;
-                if (type == CommonRequest.HttpTypeEnum.GET) {
-                    String fullUrl = mRequest.getFullUrl();
-                    TLog.d(TAG, "Request url = " + fullUrl);
-                    TLog.d(TAG, "Request param=" + mRequest.getMap().toString());
-                    request = new Request.Builder().tag(mObserver).get().url(fullUrl).build();
-                } else {
+                if (type == CommonRequest.HttpTypeEnum.POST) {
                     String baseUrl = mRequest.getBaseUrl();
-                    TLog.d(TAG, "Request url = " + baseUrl);
                     RequestBody body = mRequest.getBody();
-                    TLog.d(TAG, "Request param=" + mRequest.getJson());
+                    TLog.d(TAG, "POST Request url = " + baseUrl);
+                    TLog.d(TAG, "POST Request param=" + mRequest.getMap().toString());
                     request = new Request.Builder().tag(mObserver).post(body).url(baseUrl).build();
+                } else {
+                    String fullUrl = mRequest.getFullUrl();
+                    TLog.d(TAG, "GET Request url = " + fullUrl);
+                    TLog.d(TAG, "GET Request param=" + mRequest.getMap().toString());
+                    request = new Request.Builder().tag(mObserver).get().url(fullUrl).build();
                 }
                 OkHttpClient client = new OkHttpClient.Builder()
                         .connectTimeout(mRequest.getConnetionTimeout(), TimeUnit.MILLISECONDS)
@@ -167,7 +170,7 @@ public class HttpManager extends BaseManager implements IManager{
 
         @Override
         protected void onPostExecute(Void result) {
-            TLog.d(TAG, "Http OnPostExecute:");
+            TLog.d(TAG, "------------Http OnPostExecute-----------");
             if (!isCanceled) {
                 super.onPostExecute(result);
             } else

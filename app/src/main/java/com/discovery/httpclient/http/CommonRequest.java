@@ -16,7 +16,7 @@ import okhttp3.RequestBody;
 public class CommonRequest implements Serializable {
     private static final long serialVersionUID = 5561138003630664433L;
     public static final String TAG = "RWJ CommonRequest";
-    private Map<String, String> mMap;
+    private Map<String, Object> mMap;
     private HttpTypeEnum httpType = HttpTypeEnum.GET;
     private ContentTypeEnum contentType = ContentTypeEnum.APPLICATION_FORM;
     private MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded; charset=UTF-8");
@@ -96,11 +96,11 @@ public class CommonRequest implements Serializable {
         if (httpType != HttpTypeEnum.GET) {
             throw new RuntimeException("CommonRequest:Current request is not get!");
         }
-        Set<Map.Entry<String, String>> entrySet = mMap.entrySet();
+        Set<Map.Entry<String, Object>> entrySet = mMap.entrySet();
         StringBuilder buff = new StringBuilder();
         buff.append("?");
         int count = 0;
-        for (Map.Entry<String, String> entry : entrySet) {
+        for (Map.Entry<String, Object> entry : entrySet) {
             buff.append(count == 0 ? entry.getKey() + "=" + entry.getValue() : "&" + entry.getKey()
                     + "=" + entry.getValue());
             count++;
@@ -115,9 +115,9 @@ public class CommonRequest implements Serializable {
 
         if (contentType == ContentTypeEnum.APPLICATION_FORM) {
             FormBody.Builder body = new FormBody.Builder();
-            Set<Map.Entry<String, String>> entrySet = mMap.entrySet();
-            for (Map.Entry<String, String> entry : entrySet) {
-                body.add(entry.getKey(), entry.getValue());
+            Set<Map.Entry<String, Object>> entrySet = mMap.entrySet();
+            for (Map.Entry<String, Object> entry : entrySet) {
+                body.add(entry.getKey(), String.valueOf(entry.getValue()));
             }
             return body.build();
         }
@@ -152,7 +152,7 @@ public class CommonRequest implements Serializable {
         return contentType;
     }
 
-    public Map<String, String> getMap() {
+    public Map<String, Object> getMap() {
         return mMap;
     }
 
